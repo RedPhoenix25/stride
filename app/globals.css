@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-paper font-body text-body text-ink;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  img,
+  svg {
+    @apply block max-w-full;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  ::selection {
+    @apply bg-volt text-ink;
+  }
+}
+
+@layer components {
+  .container-content {
+    @apply mx-auto w-full max-w-frame px-5 md:px-8 lg:px-20;
+  }
+
+  .section {
+    @apply pt-14 md:pt-24;
+  }
+
+  .section-last {
+    @apply pb-14 md:pb-24;
+  }
+
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2;
+  }
+
+  .hero-shade {
+    background: linear-gradient(
+      180deg,
+      rgba(10, 10, 10, 0) 28%,
+      rgba(10, 10, 10, 0.8) 100%
+    );
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
