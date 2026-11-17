@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { products } from "@/data/products";
 import { buttonClasses } from "@/components/ui/Button";
@@ -23,9 +24,21 @@ const featured = [
 ];
 
 const categories = [
-  { label: "Sneakers", href: "/shop?category=sneakers" },
-  { label: "Apparel", href: "/shop?category=apparel" },
-  { label: "Accessories", href: "/shop?category=accessories" },
+  {
+    label: "Sneakers",
+    href: "/shop?category=sneakers",
+    image: "/editorial/category-sneakers.jpg",
+  },
+  {
+    label: "Apparel",
+    href: "/shop?category=apparel",
+    image: "/editorial/category-apparel.jpg",
+  },
+  {
+    label: "Accessories",
+    href: "/shop?category=accessories",
+    image: "/editorial/category-accessories.jpg",
+  },
 ];
 
 function pick(slugs: string[]) {
@@ -54,11 +67,17 @@ export default function HomePage() {
   return (
     <>
       <section className="relative h-hero-m overflow-hidden bg-mist md:h-hero">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="px-3 text-center font-body text-micro font-medium uppercase text-muted">
-            Hero image · editorial
-          </span>
-        </div>
+        <picture>
+          <source media="(min-width: 768px)" srcSet="/editorial/hero-desktop.jpg" />
+          <img
+            src="/editorial/hero-mobile.jpg"
+            alt="Athlete in a black training kit with a volt sleeve, standing in a dark studio"
+            width={800}
+            height={1000}
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </picture>
         <div className="hero-shade absolute inset-0" />
         <div className="absolute inset-0">
           <div className="container-content flex h-full flex-col items-start justify-end pb-7 text-white md:pb-14">
@@ -89,8 +108,14 @@ export default function HomePage() {
                 href={category.href}
                 className="focus-ring group block"
               >
-                <div className="flex aspect-product items-center justify-center bg-mist p-3.5 text-center font-body text-micro font-medium uppercase text-muted">
-                  {category.label} · 4:5
+                <div className="relative aspect-product overflow-hidden bg-mist">
+                  <Image
+                    src={category.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    className="object-cover"
+                  />
                 </div>
                 <div className="flex items-center justify-between pt-3.5 font-body text-body font-semibold">
                   <span>{category.label}</span>

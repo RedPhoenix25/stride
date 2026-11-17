@@ -4,6 +4,24 @@ A fictional sportswear storefront built as a six-person assignment. Next.js App 
 
 `main` is protected. Nobody pushes to it. The merge owner is the only person who merges.
 
+## Start here
+
+You need two things before writing code: your owner folder from `Stride-design-slices-v1.4.zip`, and `Sportswear-Store-Design-Brief.docx`. When they disagree, the brief wins.
+
+```bash
+git clone https://github.com/RedPhoenix25/stride.git
+cd stride
+git checkout test
+git checkout -b shop        # your branch: home, shop, product, cart, checkout or payment
+npm install
+npm run dev
+```
+
+- Work only inside your own route folder — see "Where things live" below.
+- Tokens, `lib/`, `components/` and `data/` belong to the design owner. Need a variant? Ask; do not edit them.
+- Commit to your branch and open the pull request against `test`, never `main`.
+- `test` reaches `main` only through the merge owner.
+
 ## Run it
 
 ```bash
@@ -75,4 +93,6 @@ Do not retype prices, totals, delivery amounts, references or banner copy. Impor
 
 ## Images
 
-`public/products/*.jpg` are labelled mist placeholders, one pair per product. Regenerate or replace them with real photography before the demo; keep the same file names so `data/products.ts` needs no change.
+`public/products/*.jpg` are 800×1000 studio packshots on a mist background, two per product — a front view for the cards and an alternate angle for the product gallery. They are generated placeholders, not real photography. Replace them with real shots before the demo; keep the same file names so `data/products.ts` needs no change.
+
+`public/editorial/` holds the home-page art direction: `hero-desktop.jpg` (1792×772) for screens 768px and wider, `hero-mobile.jpg` (800×1000) for phones, and three 800×1000 category tiles. `app/page.tsx` picks the hero with a `<picture>` source, so the phone downloads only the mobile crop.
