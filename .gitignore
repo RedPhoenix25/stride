@@ -24,5 +24,6 @@ Stride-design-slices-v*/
 Stride-design-slices-v*.zip
 .server.log
 .dev.log
+vibe_images/
 
 .vercel
