@@ -7,6 +7,7 @@ next-env.d.ts
 *.tsbuildinfo
 
 .env*.local
+.vercel
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -23,3 +24,5 @@ Stride-design-slices-v*/
 Stride-design-slices-v*.zip
 .server.log
 .dev.log
+
+.vercel

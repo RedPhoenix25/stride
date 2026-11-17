@@ -4,6 +4,24 @@ A fictional sportswear storefront built as a six-person assignment. Next.js App 
 
 `main` is protected. Nobody pushes to it. The merge owner is the only person who merges.
 
+## Start here
+
+You need two things before writing code: your owner folder from `Stride-design-slices-v1.4.zip`, and `Sportswear-Store-Design-Brief.docx`. When they disagree, the brief wins.
+
+```bash
+git clone https://github.com/RedPhoenix25/stride.git
+cd stride
+git checkout test
+git checkout -b shop        # your branch: home, shop, product, cart, checkout or payment
+npm install
+npm run dev
+```
+
+- Work only inside your own route folder — see "Where things live" below.
+- Tokens, `lib/`, `components/` and `data/` belong to the design owner. Need a variant? Ask; do not edit them.
+- Commit to your branch and open the pull request against `test`, never `main`.
+- `test` reaches `main` only through the merge owner.
+
 ## Run it
 
 ```bash
