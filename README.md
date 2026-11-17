@@ -94,3 +94,5 @@ Do not retype prices, totals, delivery amounts, references or banner copy. Impor
 ## Images
 
 `public/products/*.jpg` are 800×1000 studio packshots on a mist background, two per product — a front view for the cards and an alternate angle for the product gallery. They are generated placeholders, not real photography. Replace them with real shots before the demo; keep the same file names so `data/products.ts` needs no change.
+
+`public/editorial/` holds the home-page art direction: `hero-desktop.jpg` (1792×772) for screens 768px and wider, `hero-mobile.jpg` (800×1000) for phones, and three 800×1000 category tiles. `app/page.tsx` picks the hero with a `<picture>` source, so the phone downloads only the mobile crop.
