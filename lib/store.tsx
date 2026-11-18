@@ -20,7 +20,7 @@ import {
   totalFor,
 } from "./cart";
 import { readCart, readOrder, writeCart, writeOrder } from "./storage";
-import type { CartItem, Order, Product, Scenario } from "./types";
+import type { Address, CartItem, Order, Product, Scenario } from "./types";
 
 export interface CartLine {
   item: CartItem;
@@ -37,6 +37,7 @@ interface StoreValue {
   total: number;
   order: Order | null;
   scenario: Scenario;
+  checkoutDraft: Address | null;
   add: (productId: string, size: string, quantity?: number, stock?: number) => void;
   remove: (productId: string, size: string) => void;
   updateQuantity: (
@@ -48,6 +49,7 @@ interface StoreValue {
   clear: () => void;
   setOrder: (order: Order) => void;
   setScenario: (scenario: Scenario) => void;
+  setCheckoutDraft: (draft: Address | null) => void;
 }
 
 const StoreContext = createContext<StoreValue | null>(null);
@@ -56,6 +58,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [order, setOrderState] = useState<Order | null>(null);
   const [scenario, setScenario] = useState<Scenario>(1);
+  const [checkoutDraft, setCheckoutDraft] = useState<Address | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -122,12 +125,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     total,
     order,
     scenario,
+    checkoutDraft,
     add,
     remove,
     updateQuantity,
     clear,
     setOrder,
     setScenario,
+    setCheckoutDraft,
   };
 
   return (
