@@ -30,9 +30,10 @@ export function ProductCard({
   const [toastOpen, setToastOpen] = useState(false);
   const outOfStock = product.stock === 0;
   const singleSize = product.sizes.length === 1;
+  const firstColour = product.colourways[0];
 
   const addSize = (size: string) => {
-    add(product.id, size, 1, product.stock);
+    add(product.id, size, firstColour.name, 1, product.stock);
     setToastOpen(true);
   };
 
@@ -48,8 +49,8 @@ export function ProductCard({
     <article className="group min-w-0">
       <div className="relative aspect-product overflow-hidden bg-mist">
         <Image
-          src={product.images[0]}
-          alt={`${product.name} in ${product.colourway}`}
+          src={firstColour.images[0]}
+          alt={`${product.name} in ${firstColour.name}`}
           fill
           priority={priority}
           sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
@@ -112,7 +113,7 @@ export function ProductCard({
       />
       <Toast
         open={toastOpen}
-        message="Added to cart"
+        message={`Added to cart · ${firstColour.name}`}
         onClose={() => setToastOpen(false)}
       />
     </article>

@@ -1,6 +1,6 @@
 import type { CartItem, Order } from "./types";
 
-export const CART_KEY = "sportstore.cart.v1";
+export const CART_KEY = "sportstore.cart.v2";
 export const ORDER_KEY = "sportstore.order.v1";
 
 function readJson<T>(key: string): T | null {
@@ -31,6 +31,7 @@ export function readCart(): CartItem[] {
       item !== null &&
       typeof (item as CartItem).productId === "string" &&
       typeof (item as CartItem).size === "string" &&
+      typeof (item as CartItem).colour === "string" &&
       Number.isInteger((item as CartItem).quantity) &&
       (item as CartItem).quantity > 0,
   );

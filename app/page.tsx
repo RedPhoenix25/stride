@@ -6,21 +6,21 @@ import { ProductCard } from "@/components/ui/ProductCard";
 import { ArrowRightIcon } from "@/components/ui/icons";
 
 const newArrivals = [
-  "velocity-runner-black",
-  "trailbreak-gtx-olive",
-  "tech-fleece-hoodie-grey",
-  "performance-cap-black",
+  "velocity-runner",
+  "trailbreak-gtx",
+  "tech-fleece-hoodie",
+  "performance-cap",
 ];
 
 const featured = [
-  "court-classic-white",
-  "sprint-2-volt",
-  "pace-low-black",
-  "training-tee-black",
-  "court-shorts-black",
-  "windbreaker-jacket-volt",
-  "compression-leggings-ink",
-  "gym-duffel-black",
+  "court-classic",
+  "sprint-2",
+  "pace-low",
+  "training-tee",
+  "court-shorts",
+  "windbreaker-jacket",
+  "compression-leggings",
+  "gym-duffel",
 ];
 
 const categories = [
