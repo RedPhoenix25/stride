@@ -48,13 +48,21 @@ export default function ProductPage() {
 
 function ProductDetails({ product }: { product: Product }) {
   const { add } = useStore();
-  const firstColour = product.colourways[0];
+  const [colourwayName, setColourwayName] = useState(product.colourways[0].name);
+  const colourway =
+    product.colourways.find((entry) => entry.name === colourwayName) ??
+    product.colourways[0];
   const [size, setSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [sizeError, setSizeError] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
-  const [activeImage, setActiveImage] = useState(firstColour.images[0]);
+  const [activeImage, setActiveImage] = useState(colourway.images[0]);
+
+  const selectColourway = (next: Product["colourways"][number]) => {
+    setColourwayName(next.name);
+    setActiveImage(next.images[0]);
+  };
   const closeToast = useCallback(() => setToastOpen(false), []);
   const outOfStock = product.stock < 1;
 
@@ -72,7 +80,7 @@ function ProductDetails({ product }: { product: Product }) {
       setSizeError(true);
       return;
     }
-    add(product.id, size, firstColour.name, quantity, product.stock);
+    add(product.id, size, colourway.name, quantity, product.stock);
     setSizeError(false);
     setToastOpen(true);
   };
@@ -97,7 +105,7 @@ function ProductDetails({ product }: { product: Product }) {
             <div className="relative aspect-product overflow-hidden bg-mist">
               <Image
                 src={activeImage}
-                alt={`${product.name} in ${firstColour.name}`}
+                alt={`${product.name} in ${colourway.name}`}
                 fill
                 priority
                 sizes="(min-width: 768px) 50vw, 100vw"
@@ -107,9 +115,9 @@ function ProductDetails({ product }: { product: Product }) {
                 <div className="absolute left-4 top-4"><Badge variant={product.badge} /></div>
               ) : null}
             </div>
-            {firstColour.images.length > 1 ? (
+            {colourway.images.length > 1 ? (
               <div className="mt-3 flex gap-3 md:mt-4" aria-label="Product images">
-                {firstColour.images.map((image, index) => (
+                {colourway.images.map((image, index) => (
                   <button
                     key={image}
                     type="button"
@@ -135,9 +143,41 @@ function ProductDetails({ product }: { product: Product }) {
                 <s>{formatNaira(product.compareAtPrice)}</s>
               </p>
             ) : null}
-            <p className="mt-5 border-b border-line pb-5 font-body text-small text-muted md:mt-6 md:pb-6">
-              Colour: <span className="text-ink">{firstColour.name}</span>
-            </p>
+            <div className="mt-5 border-b border-line pb-5 md:mt-6 md:pb-6">
+              <p className="font-body text-small text-muted">
+                Colour: <span className="text-ink">{colourway.name}</span>
+              </p>
+              {product.colourways.length > 1 ? (
+                <div
+                  className="mt-3 flex gap-2"
+                  role="group"
+                  aria-label={`Colourways for ${product.name}`}
+                >
+                  {product.colourways.map((entry) => (
+                    <button
+                      key={entry.name}
+                      type="button"
+                      onClick={() => selectColourway(entry)}
+                      aria-label={entry.name}
+                      aria-pressed={entry.name === colourway.name}
+                      className={`focus-ring relative h-[60px] w-[48px] overflow-hidden bg-mist ${
+                        entry.name === colourway.name
+                          ? "ring-2 ring-ink ring-offset-2"
+                          : "border border-line hover:border-ink"
+                      }`}
+                    >
+                      <Image
+                        src={entry.images[0]}
+                        alt=""
+                        fill
+                        sizes="48px"
+                        className="object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
 
             <div className="mt-5 md:mt-6">
               <div className="mb-3 flex items-center justify-between">
@@ -249,7 +289,7 @@ function ProductDetails({ product }: { product: Product }) {
 
       <Toast
         open={toastOpen}
-        message={`Added to cart · ${firstColour.name}`}
+        message={`Added to cart · ${colourway.name}`}
         onClose={closeToast}
       />
     </>
