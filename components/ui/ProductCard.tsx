@@ -48,23 +48,29 @@ export function ProductCard({
   return (
     <article className="group min-w-0">
       <div className="relative aspect-product overflow-hidden bg-mist">
-        <Image
-          src={firstColour.images[0]}
-          alt={`${product.name} in ${firstColour.name}`}
-          fill
-          priority={priority}
-          sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-          className={`object-cover transition-transform duration-200 group-hover:scale-103 ${
-            outOfStock ? "opacity-60" : ""
-          }`}
-        />
-        <div className="absolute left-3 top-3">
-          {outOfStock ? (
-            <Badge variant="out-of-stock" />
-          ) : product.badge ? (
-            <Badge variant={product.badge} />
-          ) : null}
-        </div>
+        <Link
+          href={`/product/${product.slug}`}
+          aria-label={`View ${product.name}`}
+          className="focus-ring absolute inset-0 block"
+        >
+          <Image
+            src={firstColour.images[0]}
+            alt={`${product.name} in ${firstColour.name}`}
+            fill
+            priority={priority}
+            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+            className={`object-cover transition-transform duration-200 group-hover:scale-103 ${
+              outOfStock ? "opacity-60" : ""
+            }`}
+          />
+          <div className="absolute left-3 top-3">
+            {outOfStock ? (
+              <Badge variant="out-of-stock" />
+            ) : product.badge ? (
+              <Badge variant={product.badge} />
+            ) : null}
+          </div>
+        </Link>
         {!outOfStock ? (
           <div className="absolute bottom-3 right-3 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
             <Button
