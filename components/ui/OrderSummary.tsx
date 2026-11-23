@@ -1,7 +1,13 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { products } from "@/data/products";
-import { deliveryFor, lineTotal, subtotalFor, totalFor } from "@/lib/cart";
+import {
+  colourwayOf,
+  deliveryFor,
+  lineTotal,
+  subtotalFor,
+  totalFor,
+} from "@/lib/cart";
 import { formatNaira } from "@/lib/format";
 import type { CartItem } from "@/lib/types";
 
@@ -40,13 +46,13 @@ export function OrderSummary({
       <ul>
         {lines.map(({ item, product }) => (
           <li
-            key={`${item.productId}-${item.size}`}
+            key={`${item.productId}-${item.size}-${item.colour}`}
             className="mb-4 flex items-center gap-3 border-b border-line pb-4"
           >
             <div className="relative aspect-product w-14 flex-none bg-mist">
               <Image
-                src={product.images[0]}
-                alt={product.name}
+                src={colourwayOf(product, item.colour).images[0]}
+                alt={`${product.name} in ${item.colour}`}
                 fill
                 sizes="56px"
                 className="object-cover"
@@ -57,7 +63,7 @@ export function OrderSummary({
                 {product.name}
               </p>
               <p className="font-body text-caption text-muted">
-                Size {item.size} · Qty {item.quantity}
+                Size {item.size} · {item.colour} · Qty {item.quantity}
               </p>
             </div>
             <p className="ml-auto font-body text-meta font-semibold tabular">

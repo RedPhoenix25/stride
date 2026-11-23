@@ -38,11 +38,18 @@ interface StoreValue {
   order: Order | null;
   scenario: Scenario;
   checkoutDraft: Address | null;
-  add: (productId: string, size: string, quantity?: number, stock?: number) => void;
-  remove: (productId: string, size: string) => void;
+  add: (
+    productId: string,
+    size: string,
+    colour: string,
+    quantity?: number,
+    stock?: number,
+  ) => void;
+  remove: (productId: string, size: string, colour: string) => void;
   updateQuantity: (
     productId: string,
     size: string,
+    colour: string,
     quantity: number,
     stock?: number,
   ) => void;
@@ -72,20 +79,37 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, [items, ready]);
 
   const add = useCallback(
-    (productId: string, size: string, quantity = 1, stock = Infinity) => {
-      setItems((current) => addItem(current, productId, size, quantity, stock));
+    (
+      productId: string,
+      size: string,
+      colour: string,
+      quantity = 1,
+      stock = Infinity,
+    ) => {
+      setItems((current) =>
+        addItem(current, productId, size, colour, quantity, stock),
+      );
     },
     [],
   );
 
-  const remove = useCallback((productId: string, size: string) => {
-    setItems((current) => removeItem(current, productId, size));
-  }, []);
+  const remove = useCallback(
+    (productId: string, size: string, colour: string) => {
+      setItems((current) => removeItem(current, productId, size, colour));
+    },
+    [],
+  );
 
   const updateQuantity = useCallback(
-    (productId: string, size: string, quantity: number, stock = Infinity) => {
+    (
+      productId: string,
+      size: string,
+      colour: string,
+      quantity: number,
+      stock = Infinity,
+    ) => {
       setItems((current) =>
-        setQuantity(current, productId, size, quantity, stock),
+        setQuantity(current, productId, size, colour, quantity, stock),
       );
     },
     [],

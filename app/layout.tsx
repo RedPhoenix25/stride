@@ -1,20 +1,21 @@
 import type { Metadata } from "next";
-import { Anton, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { StoreProvider } from "@/lib/store";
 import { AnnouncementBar } from "@/components/layout/AnnouncementBar";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
-const anton = Anton({
-  subsets: ["latin"],
+const anton = localFont({
+  src: "./fonts/Anton-Regular.woff2",
   weight: "400",
   variable: "--font-anton",
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: "./fonts/Inter-Variable.woff2",
+  weight: "100 900",
   variable: "--font-inter",
   display: "swap",
 });

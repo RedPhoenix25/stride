@@ -112,8 +112,12 @@
   .qadd{position:absolute;right:12px;bottom:12px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;
         border:1px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink)}
   .qadd svg{width:20px;height:20px}
-  .editorial{background:var(--mist);padding:96px 80px;margin-top:96px}
-  .editorial p{font:400 15px/1.65 var(--body);color:#4A4A44;max-width:520px;margin:20px 0 28px}
+  .editorial{position:relative;overflow:hidden;background:var(--ink);padding:96px 80px;margin-top:96px;color:#fff}
+  .editorial .band-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .editorial::before{content:"";position:absolute;inset:0;background:rgba(10,10,10,.55)}
+  .editorial>*{position:relative;z-index:1}
+  .editorial p{font:400 15px/1.65 var(--body);color:rgba(255,255,255,.8);max-width:520px;margin:20px 0 28px}
+  .band-tag{position:absolute;top:24px;right:80px;font:500 10px/1.4 var(--body);letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.55)}
   .oos .card-media{opacity:.55}
   .oos .card-media .badge{opacity:1}
 
@@ -138,6 +142,9 @@
   .prod-price{font:600 20px/1.2 var(--body);font-variant-numeric:tabular-nums}
   .prod-price s{font-weight:400;font-size:14px;color:var(--muted);margin-left:10px}
   .colour{font:400 13.5px/1.5 var(--body);color:var(--muted);margin-top:12px}
+  .swatches-product{display:flex;gap:8px;margin-top:12px}
+  .swatch-product{width:48px;height:60px;font-size:8px;line-height:1.15}
+  .swatch-product.sel{outline:2px solid var(--ink);outline-offset:2px}
   .opt-label{display:flex;align-items:center;justify-content:space-between;
              font:600 10.5px/1 var(--body);letter-spacing:.09em;text-transform:uppercase;margin:28px 0 10px}
   .opt-label .link{font:500 11.5px/1 var(--body);letter-spacing:0;text-transform:none}
@@ -337,7 +344,9 @@
   .m .sec{padding:56px 20px 0}
   .m .sec-last{padding-bottom:56px}
   .m h2.h2{font-size:24px}
-  .m .grid-3{grid-template-columns:1fr;gap:28px}
+  .m .grid-3{grid-template-columns:repeat(2,1fr);gap:16px 12px}
+  .m .cat-wide{grid-column:1 / -1}
+  .m .cat-wide .cat-media{aspect-ratio:16/9}
   .m .grid-4{grid-template-columns:1fr 1fr;gap:12px}
   .m .card-info h3{font-size:13.5px}
   .m .card-line{font-size:11px}
@@ -358,6 +367,7 @@
   .m .crumbs{font-size:11px;margin-bottom:20px}
   .m .prod-grid{grid-template-columns:1fr;gap:28px}
   .m .thumb{width:64px;height:80px}
+  .m .swatch-product{width:40px;height:50px}
   .m .prod-title{font-size:32px}
   .m .prod-price{font-size:18px}
   .m .sizes{grid-template-columns:repeat(6,1fr);gap:6px}
@@ -548,10 +558,11 @@
   </section>
 
   <section class="sec pad">
+    <div class="sec-head"><h2 class="h2">Categories</h2></div>
     <div class="grid-3">
       <a class="cat"><div class="ph cat-media">Sneakers · 4:5</div><div class="cat-row"><span>Sneakers</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div></a>
       <a class="cat"><div class="ph cat-media">Apparel · 4:5</div><div class="cat-row"><span>Apparel</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div></a>
-      <a class="cat"><div class="ph cat-media">Accessories · 4:5</div><div class="cat-row"><span>Accessories</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div></a>
+      <a class="cat cat-wide"><div class="ph cat-media">Accessories · 16:9</div><div class="cat-row"><span>Accessories</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div></a>
     </div>
   </section>
 
@@ -566,6 +577,7 @@
   </section>
 
   <section class="editorial">
+    <div class="band-tag">Full-bleed editorial still</div>
     <h2 class="display-l">Train like it matters.</h2>
     <p>Every piece is cut for movement and built to survive the session. No gimmicks, no noise — just kit that keeps up.</p>
     <a class="btn btn-secondary">Shop all</a>
@@ -690,6 +702,7 @@
         <h1 class="prod-title">Velocity Runner</h1>
         <p class="prod-price">₦89,500</p>
         <p class="colour">Colour: Black / Volt</p>
+        <div class="swatches-product" role="group" aria-label="Colourways for Velocity Runner"><div class="ph swatch-product sel">Black</div><div class="ph swatch-product">Blue</div><div class="ph swatch-product">Red</div></div>
 
         <div class="opt-label"><span>Size</span><a class="link">Size guide</a></div>
         <div class="sizes">
@@ -1216,6 +1229,7 @@
   </section>
 
   <section class="sec">
+    <h2 class="h2" style="margin-bottom:18px">Categories</h2>
     <div class="grid-3">
       <a class="cat"><div class="ph cat-media">Sneakers · 4:5</div><div class="cat-row"><span>Sneakers</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div></a>
       <a class="cat"><div class="ph cat-media">Apparel · 4:5</div><div class="cat-row"><span>Apparel</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div></a>
@@ -1234,6 +1248,7 @@
   </section>
 
   <section class="editorial">
+    <div class="band-tag">Full-bleed editorial still</div>
     <h2 class="display-l">Train like it matters.</h2>
     <p>Every piece is cut for movement and built to survive the session. No gimmicks, no noise — just kit that keeps up.</p>
     <a class="btn btn-secondary">Shop all</a>
@@ -1337,6 +1352,7 @@
       <h1 class="prod-title">Velocity Runner</h1>
       <p class="prod-price">₦89,500</p>
       <p class="colour">Colour: Black / Volt</p>
+      <div class="swatches-product" role="group" aria-label="Colourways for Velocity Runner"><div class="ph swatch-product sel">Black</div><div class="ph swatch-product">Blue</div><div class="ph swatch-product">Red</div></div>
 
       <div class="opt-label"><span>Size</span><a class="link">Size guide</a></div>
       <div class="sizes">
@@ -1776,6 +1792,7 @@
         <h1 class="prod-title">Velocity Runner</h1>
         <p class="prod-price">₦89,500</p>
         <p class="colour">Colour: Black / Volt</p>
+        <div class="swatches-product" role="group" aria-label="Colourways for Velocity Runner"><div class="ph swatch-product sel">Black</div><div class="ph swatch-product">Blue</div><div class="ph swatch-product">Red</div></div>
 
         <div class="opt-label"><span style="color:var(--error)">Size</span><a class="link">Size guide</a></div>
         <div class="sizes">
@@ -1844,6 +1861,7 @@
         <h1 class="prod-title">Velocity Runner</h1>
         <p class="prod-price">₦89,500</p>
         <p class="colour">Colour: Black / Volt</p>
+        <div class="swatches-product" role="group" aria-label="Colourways for Velocity Runner"><div class="ph swatch-product sel">Black</div><div class="ph swatch-product">Blue</div><div class="ph swatch-product">Red</div></div>
 
         <div class="opt-label"><span>Size</span><a class="link">Size guide</a></div>
         <div class="sizes">

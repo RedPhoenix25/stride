@@ -1,5 +1,10 @@
 export type Category = "sneakers" | "apparel" | "accessories";
 
+export interface Colourway {
+  name: string;
+  images: string[];
+}
+
 export interface Product {
   id: string;
   slug: string;
@@ -7,9 +12,8 @@ export interface Product {
   category: Category;
   price: number;
   compareAtPrice?: number;
-  colourway: string;
+  colourways: Colourway[];
   sizes: string[];
-  images: string[];
   badge?: "new" | "sale";
   stock: number;
   description: string;
@@ -19,6 +23,7 @@ export interface Product {
 export interface CartItem {
   productId: string;
   size: string;
+  colour: string;
   quantity: number;
 }
 
@@ -52,6 +57,7 @@ export interface Order {
   items: {
     product: Product;
     size: string;
+    colour: string;
     quantity: number;
     lineTotal: number;
   }[];
