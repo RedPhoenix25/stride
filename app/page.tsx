@@ -3,6 +3,7 @@ import Link from "next/link";
 import { products } from "@/data/products";
 import { buttonClasses } from "@/components/ui/Button";
 import { ProductCard } from "@/components/ui/ProductCard";
+import { EditorialBand } from "@/components/home/EditorialBand";
 import { ArrowRightIcon } from "@/components/ui/icons";
 
 const newArrivals = [
@@ -101,19 +102,28 @@ export default function HomePage() {
 
       <section className="section">
         <div className="container-content">
-          <div className="grid grid-cols-1 gap-7 md:grid-cols-3 md:gap-6">
-            {categories.map((category) => (
+          <h2 className="mb-7 font-body text-h2-m font-semibold md:text-h2">
+            Collections
+          </h2>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6">
+            {categories.map((category, index) => (
               <Link
                 key={category.href}
                 href={category.href}
-                className="focus-ring group block"
+                className={`focus-ring group block ${
+                  index === 2 ? "col-span-2 md:col-span-1" : ""
+                }`}
               >
-                <div className="relative aspect-product overflow-hidden bg-mist">
+                <div
+                  className={`relative overflow-hidden bg-mist ${
+                    index === 2 ? "aspect-[16/9] md:aspect-product" : "aspect-product"
+                  }`}
+                >
                   <Image
                     src={category.image}
                     alt=""
                     fill
-                    sizes="(min-width: 768px) 33vw, 100vw"
+                    sizes="(min-width: 768px) 33vw, 50vw"
                     className="object-cover"
                   />
                 </div>
@@ -138,20 +148,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mt-14 bg-mist md:mt-24">
-        <div className="container-content py-14 md:py-24">
-          <h2 className="font-display text-d-l-m uppercase md:text-d-l">
-            Train like it matters.
-          </h2>
-          <p className="mt-5 max-w-prose font-body text-small leading-relaxed text-ink/75 md:mb-7 md:text-body">
-            Every piece is cut for movement and built to survive the session. No
-            gimmicks, no noise — just kit that keeps up.
-          </p>
-          <Link href="/shop" className={buttonClasses("secondary")}>
-            Shop all
-          </Link>
-        </div>
-      </section>
+      <EditorialBand />
 
       <section className="section section-last">
         <div className="container-content">
