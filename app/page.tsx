@@ -103,7 +103,7 @@ export default function HomePage() {
       <section className="section">
         <div className="container-content">
           <h2 className="mb-7 font-body text-h2-m font-semibold md:text-h2">
-            Collections
+            Categories
           </h2>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-6">
             {categories.map((category, index) => (
