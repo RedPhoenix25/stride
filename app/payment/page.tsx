@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { colourwayOf } from "@/lib/cart";
+import { bannerCopy, makeOrderNumber, processPayment } from "@/lib/payment";
 import { useStore } from "@/lib/store";
 import type { Order, Scenario } from "@/lib/types";
 
@@ -14,32 +15,14 @@ const money = (amount: number) =>
     maximumFractionDigits: 0,
   }).format(amount);
 
-const scenarioMessages: Record<number, { title: string; message: string }> = {
-  2: {
-    title: "Incorrect security code",
-    message: "The CVV doesn't match this card. Check the security code and try again.",
-  },
-  3: {
-    title: "Insufficient funds",
-    message: "Your card doesn't have enough available funds for this purchase.",
-  },
-  4: {
-    title: "Your card has expired",
-    message: "The expiry date on this card has passed. Use another card.",
-  },
-  5: {
-    title: "We couldn't reach your bank",
-    message: "The payment service didn't respond. Nothing was charged. Check your connection and try again.",
-  },
-  6: {
-    title: "Payment declined",
-    message: "Your bank declined this payment. Contact your bank or use a different card.",
-  },
+const SCENARIO_LABEL: Record<Scenario, string> = {
+  1: "Success",
+  2: "Declined",
+  3: "Insufficient funds",
+  4: "Expired card",
+  5: "Network error",
+  6: "CVV mismatch",
 };
-
-function createReference() {
-  return `TRX-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
-}
 
 export default function PaymentPage() {
   const router = useRouter();
@@ -62,6 +45,7 @@ export default function PaymentPage() {
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
   const [error, setError] = useState("");
+  const [cvvError, setCvvError] = useState("");
   const [processing, setProcessing] = useState(false);
 
   const cardDigits = cardNumber.replace(/\D/g, "");
@@ -81,9 +65,10 @@ export default function PaymentPage() {
     }
   }
 
-  function handlePayment(event: FormEvent<HTMLFormElement>) {
+  async function handlePayment(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    setCvvError("");
 
     if (!ready) return;
 
@@ -119,42 +104,46 @@ export default function PaymentPage() {
 
     setProcessing(true);
 
-    window.setTimeout(() => {
-      const reference = createReference();
+    const result = await processPayment(scenario);
 
-      if (scenario !== 1) {
-        const selectedScenario = scenarioMessages[scenario];
-        if (selectedScenario) {
-          setError(
-            `${selectedScenario.title}: ${selectedScenario.message} Reference: ${reference}`,
-          );
-        }
-        setProcessing(false);
-        return;
+    if (result.status === "cvv_mismatch") {
+      setCvvError(
+        `CVV doesn't match. Check the 3-digit code on the back of your card. Reference: ${result.reference}`,
+      );
+      setProcessing(false);
+      return;
+    }
+
+    if (result.status !== "success") {
+      const copy = bannerCopy(result.status, total);
+      if (copy) {
+        setError(`${copy.title} ${copy.reason} Reference: ${result.reference}`);
       }
+      setProcessing(false);
+      return;
+    }
 
-      const order: Order = {
-        orderNumber: `STR-${Date.now().toString().slice(-8)}`,
-        reference,
-        items: lines.map(({ item, product }) => ({
-          product,
-          size: item.size,
-          colour: item.colour,
-          quantity: item.quantity,
-          lineTotal: product.price * item.quantity,
-        })),
-        address: checkoutDraft,
-        cardLast4: cardDigits.slice(-4),
-        subtotal,
-        delivery,
-        total,
-        createdAt: new Date().toISOString(),
-      };
+    const order: Order = {
+      orderNumber: makeOrderNumber(),
+      reference: result.reference,
+      items: lines.map(({ item, product }) => ({
+        product,
+        size: item.size,
+        colour: item.colour,
+        quantity: item.quantity,
+        lineTotal: product.price * item.quantity,
+      })),
+      address: checkoutDraft,
+      cardLast4: cardDigits.slice(-4),
+      subtotal,
+      delivery,
+      total,
+      createdAt: new Date().toISOString(),
+    };
 
-      setOrder(order);
-      clear();
-      router.push("/order-confirmation");
-    }, 1000);
+    setOrder(order);
+    clear();
+    router.push("/order-confirmation");
   }
 
   if (!ready) {
@@ -286,15 +275,27 @@ export default function PaymentPage() {
                 <input
                   id="cvv"
                   value={cvv}
-                  onChange={(event) =>
-                    setCvv(event.target.value.replace(/\D/g, "").slice(0, 4))
-                  }
+                  onChange={(event) => {
+                    setCvv(event.target.value.replace(/\D/g, "").slice(0, 4));
+                    setCvvError("");
+                  }}
                   placeholder="123"
                   inputMode="numeric"
                   autoComplete="cc-csc"
                   maxLength={4}
-                  className="h-12 w-full rounded-md border border-[#E3E3DD] px-4 outline-none focus:border-black"
+                  aria-invalid={cvvError ? true : undefined}
+                  aria-describedby={cvvError ? "cvv-error" : undefined}
+                  className={`h-12 w-full rounded-md border px-4 outline-none ${
+                    cvvError
+                      ? "border-red-600 focus:border-red-600"
+                      : "border-[#E3E3DD] focus:border-black"
+                  }`}
                 />
+                {cvvError ? (
+                  <p id="cvv-error" role="alert" className="mt-2 text-xs text-red-700">
+                    {cvvError}
+                  </p>
+                ) : null}
               </div>
             </div>
 
@@ -311,6 +312,7 @@ export default function PaymentPage() {
                     onClick={() => {
                       setScenario(number);
                       setError("");
+                      setCvvError("");
                     }}
                     aria-pressed={scenario === number}
                     className={`flex h-10 w-10 items-center justify-center rounded-full border text-sm font-semibold ${
@@ -325,8 +327,9 @@ export default function PaymentPage() {
               </div>
 
               <p className="mt-3 text-xs text-[#6B6B63]">
-                1: Success · 2: CVV error · 3: Insufficient funds · 4: Expired
-                card · 5: Network error · 6: Declined
+                {([1, 2, 3, 4, 5, 6] as Scenario[])
+                  .map((number) => `${number}: ${SCENARIO_LABEL[number]}`)
+                  .join(" · ")}
               </p>
             </div>
 
