@@ -3,6 +3,13 @@ import type { CartItem, Product } from "./types";
 export const DELIVERY_FEE = 2500;
 export const FREE_DELIVERY_THRESHOLD = 150000;
 
+export function colourwayOf(product: Product, colour: string) {
+  return (
+    product.colourways.find((entry) => entry.name === colour) ??
+    product.colourways[0]
+  );
+}
+
 export function lineTotal(price: number, quantity: number): number {
   return price * quantity;
 }
@@ -37,17 +44,26 @@ export function addItem(
   items: CartItem[],
   productId: string,
   size: string,
+  colour: string,
   quantity = 1,
   stock = Infinity,
 ): CartItem[] {
   const existing = items.find(
-    (item) => item.productId === productId && item.size === size,
+    (item) =>
+      item.productId === productId &&
+      item.size === size &&
+      item.colour === colour,
   );
   if (!existing) {
-    return [...items, { productId, size, quantity: Math.min(quantity, stock) }];
+    return [
+      ...items,
+      { productId, size, colour, quantity: Math.min(quantity, stock) },
+    ];
   }
   return items.map((item) =>
-    item.productId === productId && item.size === size
+    item.productId === productId &&
+    item.size === size &&
+    item.colour === colour
       ? { ...item, quantity: Math.min(item.quantity + quantity, stock) }
       : item,
   );
@@ -57,9 +73,15 @@ export function removeItem(
   items: CartItem[],
   productId: string,
   size: string,
+  colour: string,
 ): CartItem[] {
   return items.filter(
-    (item) => !(item.productId === productId && item.size === size),
+    (item) =>
+      !(
+        item.productId === productId &&
+        item.size === size &&
+        item.colour === colour
+      ),
   );
 }
 
@@ -67,13 +89,16 @@ export function setQuantity(
   items: CartItem[],
   productId: string,
   size: string,
+  colour: string,
   quantity: number,
   stock = Infinity,
 ): CartItem[] {
-  if (quantity <= 0) return removeItem(items, productId, size);
+  if (quantity <= 0) return removeItem(items, productId, size, colour);
   const capped = Math.min(quantity, stock);
   return items.map((item) =>
-    item.productId === productId && item.size === size
+    item.productId === productId &&
+    item.size === size &&
+    item.colour === colour
       ? { ...item, quantity: capped }
       : item,
   );

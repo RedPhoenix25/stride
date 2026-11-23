@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { colourwayOf } from "@/lib/cart";
 import { useStore } from "@/lib/store";
 
 const money = (amount: number) =>
@@ -79,17 +80,22 @@ export default function OrderConfirmationPage() {
 
           <div className="px-5 pb-6 md:px-6">
             {order.items.map((item, index) => (
-              <div key={`${item.product.id}-${item.size}-${index}`} className="flex gap-4 border-b border-[#E3E3DD] py-5">
+              <div key={`${item.product.id}-${item.size}-${item.colour}-${index}`} className="flex gap-4 border-b border-[#E3E3DD] py-5">
                 <div className="h-24 w-[76px] shrink-0 overflow-hidden bg-[#F4F4F0] sm:h-[110px] sm:w-[88px]">
-                  {item.product.images?.[0] && (
+                  {
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={item.product.images[0]} alt={item.product.name} className="h-full w-full object-cover" />
-                  )}
+                    <img
+                      src={colourwayOf(item.product, item.colour).images[0]}
+                      alt={`${item.product.name} in ${colourwayOf(item.product, item.colour).name}`}
+                      className="h-full w-full object-cover"
+                    />
+                  }
                 </div>
                 <div className="min-w-0 flex-1">
                   <h2 className="text-sm font-semibold">{item.product.name}</h2>
                   <p className="mt-1 text-xs leading-5 text-[#6B6B63]">
-                    {item.product.category} · Size {item.size} · Qty {item.quantity}
+                    {item.product.category} · Size {item.size} ·{" "}
+                    {colourwayOf(item.product, item.colour).name} · Qty {item.quantity}
                   </p>
                   <p className="mt-2 text-sm font-semibold">{money(item.lineTotal)}</p>
                 </div>
