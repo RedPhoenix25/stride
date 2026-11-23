@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --font-anton: "Arial Narrow", "Arial", sans-serif;
-  --font-inter: Arial, Helvetica, sans-serif;
-}
-
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
