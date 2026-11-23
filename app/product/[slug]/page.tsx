@@ -108,7 +108,7 @@ function ProductDetails({ product }: { product: Product }) {
               ) : null}
             </div>
             {firstColour.images.length > 1 ? (
-              <div className="mt-3 grid grid-cols-2 gap-3 md:mt-4 md:gap-4" aria-label="Product images">
+              <div className="mt-3 flex gap-3 md:mt-4" aria-label="Product images">
                 {firstColour.images.map((image, index) => (
                   <button
                     key={image}
@@ -116,9 +116,9 @@ function ProductDetails({ product }: { product: Product }) {
                     onClick={() => setActiveImage(image)}
                     aria-label={`View ${index === 0 ? "front" : `image ${index + 1}`} of ${product.name}`}
                     aria-pressed={activeImage === image}
-                    className={`focus-ring relative aspect-product overflow-hidden bg-mist ${activeImage === image ? "ring-2 ring-ink ring-offset-2" : ""}`}
+                    className={`focus-ring relative h-20 w-16 overflow-hidden bg-mist md:h-[108px] md:w-[86px] ${activeImage === image ? "ring-2 ring-ink ring-offset-2" : ""}`}
                   >
-                    <Image src={image} alt="" fill sizes="(min-width: 768px) 24vw, 48vw" className="object-cover" />
+                    <Image src={image} alt="" fill sizes="(min-width: 768px) 86px, 64px" className="object-cover" />
                   </button>
                 ))}
               </div>
