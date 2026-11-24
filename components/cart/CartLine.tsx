@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { formatNaira } from "@/lib/format";
-import { lineTotal } from "@/lib/cart";
+import { colourwayOf, lineTotal } from "@/lib/cart";
 import type { CartItem, Product } from "@/lib/types";
 import { QuantityStepper } from "@/components/ui/QuantityStepper";
 
@@ -29,8 +29,8 @@ export function CartLine({
     <li className="flex gap-3.5 border-b border-line py-4 first:border-t md:gap-5 md:py-6">
       <div className="relative aspect-line w-20 flex-none bg-mist md:w-24">
         <Image
-          src={product.images[0]}
-          alt={`${product.name}, ${product.colourway}`}
+          src={colourwayOf(product, item.colour).images[0]}
+          alt={`${product.name}, ${item.colour}`}
           fill
           sizes="(max-width: 767px) 80px, 96px"
           className="object-cover"
@@ -43,20 +43,21 @@ export function CartLine({
             {product.name}
           </h2>
           <p className="mt-1 font-body text-caption text-muted md:text-meta">
-            {categoryLabels[product.category]} · Size {item.size} · {formatNaira(product.price)} each
+            {categoryLabels[product.category]} · Size {item.size} · {item.colour} ·{" "}
+            {formatNaira(product.price)} each
           </p>
           <div className="mt-2.5 flex flex-wrap items-center gap-3 md:mt-3.5 md:gap-5">
             <QuantityStepper
               value={item.quantity}
               max={product.stock}
               onChange={onQuantityChange}
-              label={`Quantity for ${product.name}, size ${item.size}`}
+              label={`Quantity for ${product.name}, ${item.colour}, size ${item.size}`}
             />
             <button
               type="button"
               onClick={onRemove}
               className="focus-ring rounded-sm font-body text-caption text-muted underline underline-offset-4 hover:text-ink md:text-meta"
-              aria-label={`Remove ${product.name}, size ${item.size}`}
+              aria-label={`Remove ${product.name}, ${item.colour}, size ${item.size}`}
             >
               Remove
             </button>

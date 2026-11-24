@@ -38,13 +38,19 @@ export default function CartPage() {
             <ul aria-label="Cart items" className="min-w-0 flex-1">
               {lines.map(({ item, product }) => (
                 <CartLine
-                  key={`${item.productId}-${item.size}`}
+                  key={`${item.productId}-${item.size}-${item.colour}`}
                   item={item}
                   product={product}
                   onQuantityChange={(quantity) =>
-                    updateQuantity(item.productId, item.size, quantity, product.stock)
+                    updateQuantity(
+                      item.productId,
+                      item.size,
+                      item.colour,
+                      quantity,
+                      product.stock,
+                    )
                   }
-                  onRemove={() => remove(item.productId, item.size)}
+                  onRemove={() => remove(item.productId, item.size, item.colour)}
                 />
               ))}
             </ul>

@@ -48,12 +48,13 @@ export default function ProductPage() {
 
 function ProductDetails({ product }: { product: Product }) {
   const { add } = useStore();
+  const firstColour = product.colourways[0];
   const [size, setSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [sizeError, setSizeError] = useState(false);
   const [toastOpen, setToastOpen] = useState(false);
   const [guideOpen, setGuideOpen] = useState(false);
-  const [activeImage, setActiveImage] = useState(product.images[0]);
+  const [activeImage, setActiveImage] = useState(firstColour.images[0]);
   const closeToast = useCallback(() => setToastOpen(false), []);
   const outOfStock = product.stock < 1;
 
@@ -71,7 +72,7 @@ function ProductDetails({ product }: { product: Product }) {
       setSizeError(true);
       return;
     }
-    add(product.id, size, quantity, product.stock);
+    add(product.id, size, firstColour.name, quantity, product.stock);
     setSizeError(false);
     setToastOpen(true);
   };
@@ -96,7 +97,7 @@ function ProductDetails({ product }: { product: Product }) {
             <div className="relative aspect-product overflow-hidden bg-mist">
               <Image
                 src={activeImage}
-                alt={`${product.name} in ${product.colourway}`}
+                alt={`${product.name} in ${firstColour.name}`}
                 fill
                 priority
                 sizes="(min-width: 768px) 50vw, 100vw"
@@ -106,9 +107,9 @@ function ProductDetails({ product }: { product: Product }) {
                 <div className="absolute left-4 top-4"><Badge variant={product.badge} /></div>
               ) : null}
             </div>
-            {product.images.length > 1 ? (
+            {firstColour.images.length > 1 ? (
               <div className="mt-3 grid grid-cols-2 gap-3 md:mt-4 md:gap-4" aria-label="Product images">
-                {product.images.map((image, index) => (
+                {firstColour.images.map((image, index) => (
                   <button
                     key={image}
                     type="button"
@@ -135,7 +136,7 @@ function ProductDetails({ product }: { product: Product }) {
               </p>
             ) : null}
             <p className="mt-5 border-b border-line pb-5 font-body text-small text-muted md:mt-6 md:pb-6">
-              Colour: <span className="text-ink">{product.colourway}</span>
+              Colour: <span className="text-ink">{firstColour.name}</span>
             </p>
 
             <div className="mt-5 md:mt-6">
@@ -246,7 +247,11 @@ function ProductDetails({ product }: { product: Product }) {
         </div>
       ) : null}
 
-      <Toast open={toastOpen} message="Added to cart" onClose={closeToast} />
+      <Toast
+        open={toastOpen}
+        message={`Added to cart · ${firstColour.name}`}
+        onClose={closeToast}
+      />
     </>
   );
 }
